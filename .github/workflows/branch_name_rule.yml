@@ -28,6 +28,7 @@ jobs:
             echo "Required format: {type}/{description}"
             echo "Valid types: feature, bugfix, hotfix, release, docs, chore"
             echo "Description: lowercase letters, numbers, and hyphens"
+            echo ""
             exit 1
           fi
 
