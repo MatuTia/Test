@@ -29,6 +29,12 @@ jobs:
             echo "Valid types: feature, bugfix, hotfix, release, docs, chore"
             echo "Description: lowercase letters, numbers, and hyphens"
             echo ""
+            echo "Examples:"
+            echo "  ✅ feature/user-authentication"
+            echo "  ✅ bugfix/login-button-fix"
+            echo "  ❌ my-feature (missing type prefix)"
+            echo "  ❌ feature/My_Feature (invalid characters)"
+            echo ""
             exit 1
           fi
 
@@ -39,20 +45,20 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const branch = '${{ github.head_ref }}';
+            const body = '❌ **Branch name validation failed**\n\n' +
+              'Your branch name `' + branch + '` does not follow the naming convention.\n\n' +
+              '**Required format:** `{type}/{description}`\n\n' +
+              '**Valid types:**\n' +
+              '- `feature` - New features\n' +
+              '- `bugfix` - Bug fixes\n' +
+              '- `hotfix` - Critical production fixes\n' +
+              '- `release` - Release branches\n' +
+              '- `docs` - Documentation updates\n' +
+              '- `chore` - Maintenance tasks\n\n' +
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `❌ **Branch name validation failed**
-
-Your branch name \`${branch}\` does not follow the naming convention.
-
-**Required format:** \`{type}/{description}\`
-
-**Valid types:**
-- \`feature\` - New features
-- \`bugfix\` - Bug fixes
-- \`hotfix\` - Critical production fixes
-- \`release\` - Release branches
-- \`docs\` - Documentation updates
-- \`chore\` - Maintenance tasks
+              body: body
+            })
