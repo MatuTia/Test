@@ -37,13 +37,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const branch = '${{ github.head_ref }}';
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: `❌ **Branch name validation failed**
 
-Your branch name \`${{ github.head_ref }}\` does not follow the naming convention.
+Your branch name \`${branch}\` does not follow the naming convention.
 
 **Required format:** \`{type}/{description}\`
 
